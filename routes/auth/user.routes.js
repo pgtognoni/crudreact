@@ -11,10 +11,25 @@ router.post('/signUp', async (req, res, next) => {
     const body = req.body;
     try { 
         const user = await User.create(body);
-        console.log(user);
         res.json(user);
     } catch (error) { 
-        console.log(error);
+        console.error(error);
+        res.json(error);
+    }
+})
+
+router.post('/login', async (req, res, next) => {
+    const userName = req.body.userName;
+    try {
+        const user = await User.findOne({ userName: userName });
+        if (req.body.password === user.password) {
+            res.json(user);
+        } else {
+            res.json('Wrong password');
+        }
+    } catch (error) {
+        console.error(error);
+        res.json(error);
     }
 })
 
@@ -26,6 +41,7 @@ router.put('/:username/update/', async (req, res, next) => {
         res.json(userUpdate);
     } catch (error) { 
         console.log(error);
+        res.json(error);
     }
 })
 
@@ -36,6 +52,8 @@ router.delete('/:username/delete', async (req, res, next) => {
 
     } catch (error) {
         console.log(error); 
+        res.json(error);
     }
 })
+
 module.exports = router;
